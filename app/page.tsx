@@ -1,5 +1,5 @@
 // app/page.tsx
-import GoldPriceChart from '@/components/charts/GoldPriceChart';
+import GoldPriceChart from '@/components/charts/AdvancedTradingViewWidget';
 
 export default function HomePage() {
   return (

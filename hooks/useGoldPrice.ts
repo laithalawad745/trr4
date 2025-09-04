@@ -16,3 +16,6 @@ export function useGoldPrice(refetchInterval = 5000) {
     staleTime: 3000,
   });
 }
+
+
+
