@@ -1,0 +1,58 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  username      String    @unique
+  password      String
+  name          String?
+  image         String?
+  points        Int       @default(0)
+  trades        Trade[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Trade {
+  id            String    @id @default(cuid())
+  userId        String
+  user          User      @relation(fields: [userId], references: [id])
+  
+  // بيانات الصفقة
+  entryPrice    Float
+  targetPrice   Float     // Take Profit
+  stopLoss      Float
+  
+  // الحالة
+  status        TradeStatus @default(PENDING)
+  result        TradeResult?
+  
+  // النتيجة
+  exitPrice     Float?
+  exitDate      DateTime?
+  profit        Float?    // نسبة الربح/الخسارة
+  
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum TradeStatus {
+  PENDING   // في الانتظار
+  ACTIVE    // نشطة
+  COMPLETED // مكتملة
+}
+
+enum TradeResult {
+  WIN       // ربح
+  LOSS      // خسارة
+  CANCELLED // ملغاة
+}
